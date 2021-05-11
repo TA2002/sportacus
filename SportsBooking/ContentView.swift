@@ -20,14 +20,15 @@ struct ContentView: View {
         
     }
     var body: some View {
-        TabView {
-            MainView()
-                .tabItem {
-                    Label("Главная", systemImage: "house.fill")
-                }
-                .tag(0)
-        }
-        .accentColor(.red)
+        LoginView()
+//        TabView {
+//            MainView()
+//                .tabItem {
+//                    Label("Главная", systemImage: "house.fill")
+//                }
+//                .tag(0)
+//        }
+//        .accentColor(.red)
         
     }
 }

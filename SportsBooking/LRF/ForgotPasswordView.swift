@@ -7,8 +7,11 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct ForgotPasswordView: View {
+    
+    @ObservedObject var currentUserSession: UserSession
     
     @State var email: String = ""
     @State var showAlert = false
@@ -61,7 +64,8 @@ struct ForgotPasswordView: View {
                     Button(action: {
 
                         if self.isValidInputs() {
-                            self.presentationMode.wrappedValue.dismiss()
+                            sendPasswordReset(email: self.email)
+                            //self.presentationMode.wrappedValue.dismiss()
                         }
 
                     }) {
@@ -72,6 +76,40 @@ struct ForgotPasswordView: View {
                 }
             }
         }.alert(isPresented: $showAlert, content: { self.alert })
+    }
+    
+    func sendPasswordReset(email: String) {
+        
+        Auth.auth().languageCode = "ru"
+        Auth.auth().sendPasswordReset(withEmail: email) { (error) in
+            if let error = error as? NSError {
+                switch AuthErrorCode(rawValue: error.code) {
+                    case .userNotFound:
+                        self.alertMsg = ResetMessage.userNotFound.rawValue
+                        self.showAlert.toggle()
+                    case .invalidEmail:
+                        self.alertMsg = ResetMessage.invalidEmail.rawValue
+                        self.showAlert.toggle()
+                    case .invalidRecipientEmail:
+                        self.alertMsg = ResetMessage.invalidRecipientEmail.rawValue
+                        self.showAlert.toggle()
+                    case .invalidSender:
+                        self.alertMsg = ResetMessage.invalidSender.rawValue
+                        self.showAlert.toggle()
+                    case .invalidMessagePayload:
+                        self.alertMsg = ResetMessage.invalidMessagePayload.rawValue
+                        self.showAlert.toggle()
+                    default:
+                        print("Error message: \(error.localizedDescription)")
+                }
+            }
+            else {
+                self.alertMsg = ResetMessage.success.rawValue
+                self.showAlert.toggle()
+                print("Reset password email has been successfully sent")
+            }
+        }
+        
     }
     
     func isValidInputs() -> Bool {
@@ -100,14 +138,6 @@ struct ModalView: View {
     }
   }
 }
-
-struct ForgotPasswordView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForgotPasswordView()
-        
-    }
-}
-
 
 
 

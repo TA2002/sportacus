@@ -7,8 +7,15 @@
 
 import SwiftUI
 import UIKit
+import Firebase
 
 struct ContentView: View {
+    @ObservedObject var currentUserSession = UserSession()
+    
+    func isUserLoggedIn() -> Bool {
+      return Auth.auth().currentUser != nil
+    }
+    
     init() {
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         UINavigationBar.appearance().shadowImage = UIImage()
@@ -20,17 +27,44 @@ struct ContentView: View {
         
     }
     var body: some View {
-        LoginView()
-//        TabView {
-//            MainView()
-//                .tabItem {
-//                    Label("Главная", systemImage: "house.fill")
-//                }
-//                .tag(0)
-//        }
-//        .accentColor(.red)
+            
+        Group {
+            if currentUserSession.userLogedIn {
+                TabView {
+                    MainView(currentUserSession: currentUserSession)
+                        .tabItem {
+                            Label("Главная", systemImage: "house.fill")
+                        }
+                        .tag(0)
+                    ProfileScreen(currentUserSession: currentUserSession)
+                        .tabItem {
+                            Label("Профиль", systemImage: "person.circle.fill")
+                        }
+                        .tag(1)
+                }
+                .accentColor(.red)
+            }
+            else {
+                LoginView(currentUserSession: currentUserSession)
+            }
+        }
+        
         
     }
+}
+
+struct ProfileScreen: View {
+    
+    @ObservedObject var currentUserSession: UserSession
+    
+    var body: some View {
+        Button("Log out", action: {
+            currentUserSession.userDidLogOut()
+        })
+    }
+    
+    
+    
 }
 
 

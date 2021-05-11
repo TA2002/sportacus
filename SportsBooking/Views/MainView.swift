@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MainView: View {
+    @ObservedObject var currentUserSession: UserSession
     
     @State var searchText: String = ""
     @State private var showCancelButton: Bool = false

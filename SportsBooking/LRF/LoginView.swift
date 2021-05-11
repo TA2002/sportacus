@@ -10,8 +10,9 @@ import SwiftUI
 import Firebase
 
 struct LoginView: View {
-    
-    @EnvironmentObject var settings: UserSettings
+    @ObservedObject var currentUserSession: UserSession
+    //@Binding var session: UserSession
+    //@EnvironmentObject var settings: UserSettings
     
     @State var email: String = ""
     @State var password: String = ""
@@ -85,7 +86,7 @@ struct LoginView: View {
                                 .font(.system(size: (UIScreen.main.bounds.width * 15) / 414, weight: .bold, design: .default))
                             
                         }.sheet(isPresented: self.$showForgotPassword) {
-                            ForgotPasswordView()
+                            ForgotPasswordView(currentUserSession: currentUserSession)
                         }
                         
                     }.padding(.trailing, (UIScreen.main.bounds.width * 10) / 414)
@@ -121,7 +122,7 @@ struct LoginView: View {
                             .font(.system(size: (UIScreen.main.bounds.width * 15) / 414, weight: .bold, design: .default))
                         
                     }.sheet(isPresented: self.$showSignup) {
-                        SignUpView()
+                        SignUpView(currentUserSession: currentUserSession)
                     }
                     
                     Spacer(minLength: (UIScreen.main.bounds.width * 20) / 414)
@@ -155,12 +156,14 @@ struct LoginView: View {
             }
             else {
                 print("User signs in successfully")
-                let userInfo = Auth.auth().currentUser
-                let email = userInfo?.email
-                self.alertMsg = LoginMessage.success.rawValue
-                self.showAlert.toggle()
-                UserDefaults.standard.set(true, forKey: "Loggedin")
-                UserDefaults.standard.synchronize()
+                currentUserSession.userDidLogIn()
+                //let userInfo = Auth.auth().currentUser
+                //print(userInfo)
+                //let email = userInfo?.email
+//                self.alertMsg = LoginMessage.success.rawValue
+//                self.showAlert.toggle()
+//                UserDefaults.standard.set(true, forKey: "Loggedin")
+//                UserDefaults.standard.synchronize()
                 //self.settings.loggedIn = true
             }
         }
@@ -196,11 +199,6 @@ class UserSettings: ObservableObject {
     @Published var loggedIn : Bool = false
 }
 
-struct LoginView_Previews: PreviewProvider {
-    static var previews: some View {
-        LoginView()
-    }
-}
 
 struct RoundedImage: View {
 

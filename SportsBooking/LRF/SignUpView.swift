@@ -10,6 +10,8 @@ import SwiftUI
 import Firebase
 
 struct SignUpView: View {
+    @ObservedObject var currentUserSession: UserSession
+    //var session: UserSession
     
     @EnvironmentObject var settings: UserSettings
     @State var firstName: String = ""
@@ -251,10 +253,11 @@ struct SignUpView: View {
             }
             else {
                 print("User signs up successfully")
-                let newUserInfo = Auth.auth().currentUser
-                let email = newUserInfo?.email
-                self.alertMsg = RegistrationMessage.success.rawValue
-                self.showAlert.toggle()
+                currentUserSession.userDidLogIn()
+//                let newUserInfo = Auth.auth().currentUser
+//                let email = newUserInfo?.email
+                //self.alertMsg = RegistrationMessage.success.rawValue
+                //self.showAlert.toggle()
                 self.presentationMode.wrappedValue.dismiss()
             }
         }
@@ -309,11 +312,6 @@ struct SignUpView: View {
     }
 }
 
-struct SignUpView_Previews: PreviewProvider {
-    static var previews: some View {
-        SignUpView()
-    }
-}
 
 struct seperator: View {
     

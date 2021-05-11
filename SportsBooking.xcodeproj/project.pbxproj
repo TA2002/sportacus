@@ -10,6 +10,8 @@
 		6946996E264AE34500D00BB3 /* RegistrationMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6946996D264AE34500D00BB3 /* RegistrationMessage.swift */; };
 		69469972264AE39400D00BB3 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69469971264AE39400D00BB3 /* Service.swift */; };
 		69469977264AEFC500D00BB3 /* LoginMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69469976264AEFC500D00BB3 /* LoginMessage.swift */; };
+		6946997D264AFE0400D00BB3 /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6946997C264AFE0400D00BB3 /* UserSession.swift */; };
+		69469984264B088E00D00BB3 /* ResetMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69469983264B088E00D00BB3 /* ResetMessage.swift */; };
 		69F630CA264991B000B4F337 /* SportsBookingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F630C9264991B000B4F337 /* SportsBookingApp.swift */; };
 		69F630CC264991B000B4F337 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F630CB264991B000B4F337 /* ContentView.swift */; };
 		69F630CE264991B200B4F337 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69F630CD264991B200B4F337 /* Assets.xcassets */; };
@@ -31,6 +33,8 @@
 		6946996D264AE34500D00BB3 /* RegistrationMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationMessage.swift; sourceTree = "<group>"; };
 		69469971264AE39400D00BB3 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		69469976264AEFC500D00BB3 /* LoginMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginMessage.swift; sourceTree = "<group>"; };
+		6946997C264AFE0400D00BB3 /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
+		69469983264B088E00D00BB3 /* ResetMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetMessage.swift; sourceTree = "<group>"; };
 		69F630C6264991B000B4F337 /* SportsBooking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SportsBooking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69F630C9264991B000B4F337 /* SportsBookingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsBookingApp.swift; sourceTree = "<group>"; };
 		69F630CB264991B000B4F337 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -69,6 +73,7 @@
 			children = (
 				6946996D264AE34500D00BB3 /* RegistrationMessage.swift */,
 				69469976264AEFC500D00BB3 /* LoginMessage.swift */,
+				69469983264B088E00D00BB3 /* ResetMessage.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -79,6 +84,28 @@
 				69469971264AE39400D00BB3 /* Service.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		69469979264AFBEB00D00BB3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				69F630CB264991B000B4F337 /* ContentView.swift */,
+				69F630DD264A99B200B4F337 /* DetailView.swift */,
+				69F630DA264A998900B4F337 /* MainView.swift */,
+				69F630EA264AA21400B4F337 /* SearchBar.swift */,
+				69F630E4264A9EFB00B4F337 /* FieldsList.swift */,
+				69F630E7264A9FA500B4F337 /* FieldsListCell.swift */,
+				69F630E1264A9D1E00B4F337 /* SpecialOfferCarousel.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6946997F264AFE0800D00BB3 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				6946997C264AFE0400D00BB3 /* UserSession.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		69F630BD264991B000B4F337 = {
@@ -102,19 +129,14 @@
 		69F630C8264991B000B4F337 /* SportsBooking */ = {
 			isa = PBXGroup;
 			children = (
+				6946997F264AFE0800D00BB3 /* ViewModel */,
 				69469970264AE38200D00BB3 /* Services */,
 				6946996C264AE33000D00BB3 /* Utilities */,
-				69F630FA264ADC0200B4F337 /* GoogleService-Info.plist */,
 				69F630F1264AD03500B4F337 /* LRF */,
-				69F630C9264991B000B4F337 /* SportsBookingApp.swift */,
-				69F630CB264991B000B4F337 /* ContentView.swift */,
-				69F630DD264A99B200B4F337 /* DetailView.swift */,
-				69F630DA264A998900B4F337 /* MainView.swift */,
-				69F630EA264AA21400B4F337 /* SearchBar.swift */,
-				69F630E4264A9EFB00B4F337 /* FieldsList.swift */,
-				69F630E7264A9FA500B4F337 /* FieldsListCell.swift */,
-				69F630E1264A9D1E00B4F337 /* SpecialOfferCarousel.swift */,
+				69469979264AFBEB00D00BB3 /* Views */,
 				69F630CD264991B200B4F337 /* Assets.xcassets */,
+				69F630FA264ADC0200B4F337 /* GoogleService-Info.plist */,
+				69F630C9264991B000B4F337 /* SportsBookingApp.swift */,
 				69F630D2264991B200B4F337 /* Info.plist */,
 				69F630CF264991B200B4F337 /* Preview Content */,
 			);
@@ -275,7 +297,9 @@
 				69F630F8264AD05100B4F337 /* ForgotPasswordView.swift in Sources */,
 				69469977264AEFC500D00BB3 /* LoginMessage.swift in Sources */,
 				69F630E8264A9FA500B4F337 /* FieldsListCell.swift in Sources */,
+				69469984264B088E00D00BB3 /* ResetMessage.swift in Sources */,
 				69F630DE264A99B200B4F337 /* DetailView.swift in Sources */,
+				6946997D264AFE0400D00BB3 /* UserSession.swift in Sources */,
 				6946996E264AE34500D00BB3 /* RegistrationMessage.swift in Sources */,
 				69F630E2264A9D1E00B4F337 /* SpecialOfferCarousel.swift in Sources */,
 				69F630DB264A998900B4F337 /* MainView.swift in Sources */,

@@ -11,6 +11,7 @@ import Firebase
 
 struct SignUpView: View {
     @ObservedObject var currentUserSession: UserSession
+    private let database = Database.database(url: "https://sportacus-dd671-default-rtdb.asia-southeast1.firebasedatabase.app").reference()
     //var session: UserSession
     
     @EnvironmentObject var settings: UserSettings
@@ -254,6 +255,10 @@ struct SignUpView: View {
             else {
                 print("User signs up successfully")
                 currentUserSession.userDidLogIn()
+                database.child("users").child("\(String(describing: Auth.auth().currentUser!.uid))").child("firstName").setValue(firstName)
+                database.child("users").child("\(String(describing: Auth.auth().currentUser!.uid))").child("lastName").setValue(lastName)
+                database.child("users").child("\(String(describing: Auth.auth().currentUser!.uid))").child("email").setValue(email)
+                database.child("users").child("\(String(describing: Auth.auth().currentUser!.uid))").child("phoneNumber").setValue(contactNo)
 //                let newUserInfo = Auth.auth().currentUser
 //                let email = newUserInfo?.email
                 //self.alertMsg = RegistrationMessage.success.rawValue

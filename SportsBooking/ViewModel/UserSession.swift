@@ -19,7 +19,7 @@ class UserSession: ObservableObject {
     func userDidLogIn() {
         userLogedIn = true
         //UserDefaults.standard.set(true, forKey: "userLogedIn")
-        print(Auth.auth().currentUser?.email)
+        print(Auth.auth().currentUser?.email ?? "")
     }
     
     func userDidLogOut() {

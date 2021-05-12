@@ -1,5 +1,5 @@
 //
-//  MainView.swift
+//  HomeScreen.swift
 //  SportsBooking
 //
 //  Created by Tarlan Askaruly on 11.05.2021.
@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-struct MainView: View {
+struct HomeScreen: View {
     @ObservedObject var currentUserSession: UserSession
+    @Environment(\.colorScheme) var colorScheme
     
     @State var searchText: String = ""
     @State private var showCancelButton: Bool = false
@@ -19,13 +20,12 @@ struct MainView: View {
             GeometryReader { geometry in
                 ScrollView(showsIndicators: false) {
                     VStack{
-                        SearchBar()
+                        SearchBar().padding(.top, -computedTopPadding(for: geometry.size) * 0.5)
                         VStack {
                             HStack {
                                 Text("Горячие предложения")
                                     .bold()
                                     .multilineTextAlignment(.trailing)
-                                    .foregroundColor(Color(#colorLiteral(red: 0.9580881, green: 0.10593573, blue: 0.3403331637, alpha: 1)))
                                     .padding(.leading, 20)
                                 
                                 Spacer()
@@ -40,12 +40,12 @@ struct MainView: View {
                                 HStack {
                                     ForEach(0..<7) { card in
                                         NavigationLink(
-                                            destination: DetailView(),
+                                            destination: DetailsScreen(for: geometry.size),
                                             label: {
                                                 SpecialOfferCarousel()
-                                                    .background(Color.white.opacity(1))
+                                                    .background(colorScheme == .dark ? Color.black.opacity(1) : Color.white.opacity(1))
                                                     .cornerRadius(15)
-                                                    .shadow(radius: 1)
+                                                    .shadow(color: colorScheme == .dark ? Color.white : Color.black.opacity(0.4), radius: 2)
                                             })
                                             .buttonStyle(PlainButtonStyle())
                                     }
@@ -53,16 +53,17 @@ struct MainView: View {
                                     .padding(.leading, 30)
                                     
                                 }
+                                .padding(.top, 10)
                             }
                         }
-                        .padding(.top, -50)
+                        .padding(.top, -computedTopPadding(for: geometry.size))
                         .opacity(1)
                         
                         ZStack {
                             Rectangle()
                                 .foregroundColor(Color.gray.opacity(0.1))
                             VStack {
-                                FieldsList()
+                                FieldsList(for: geometry.size)
                             }
                             .padding(.top, -20)
                         }
@@ -76,6 +77,11 @@ struct MainView: View {
                     .navigationBarHidden(true)
         }
     }
+    
+    private func computedTopPadding(for size: CGSize) -> CGFloat {
+        size.height * 0.1
+    }
+    
 }
 
 //HStack {

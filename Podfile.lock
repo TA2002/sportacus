@@ -98,11 +98,13 @@ PODS:
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
   - PromisesObjC (1.2.12)
+  - Tagly (0.1.1)
 
 DEPENDENCIES:
   - Firebase/Analytics
   - Firebase/Auth
   - Firebase/Database
+  - Tagly (~> 0.1)
 
 SPEC REPOS:
   trunk:
@@ -120,6 +122,7 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - PromisesObjC
+    - Tagly
 
 SPEC CHECKSUMS:
   Firebase: c121feb35e4126c0b355e3313fa9b487d47319fd
@@ -136,7 +139,8 @@ SPEC CHECKSUMS:
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
+  Tagly: deb459c698853a3fffce027fedb92dcb7cf5c68e
 
-PODFILE CHECKSUM: 9a84815ed3aa454fb59cd8e02fc498774f7a9160
+PODFILE CHECKSUM: 80fc4ca8046f842ef5821ce8805441f4b9820546
 
 COCOAPODS: 1.10.1

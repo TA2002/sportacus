@@ -254,6 +254,7 @@ struct SignUpView: View {
             }
             else {
                 print("User signs up successfully")
+                
                 currentUserSession.userDidLogIn()
                 database.child("users").child("\(String(describing: Auth.auth().currentUser!.uid))").child("firstName").setValue(firstName)
                 database.child("users").child("\(String(describing: Auth.auth().currentUser!.uid))").child("lastName").setValue(lastName)

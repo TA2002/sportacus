@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SpecialOfferCarousel: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         VStack {
             Image("court")

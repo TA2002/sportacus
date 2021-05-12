@@ -11,7 +11,7 @@ import Firebase
 
 struct ContentView: View {
     @ObservedObject var currentUserSession = UserSession()
-    
+    //@Environment(\.colorScheme) var colorScheme
     func isUserLoggedIn() -> Bool {
       return Auth.auth().currentUser != nil
     }
@@ -31,7 +31,7 @@ struct ContentView: View {
         Group {
             if currentUserSession.userLogedIn {
                 TabView {
-                    MainView(currentUserSession: currentUserSession)
+                    HomeScreen(currentUserSession: currentUserSession)
                         .tabItem {
                             Label("Главная", systemImage: "house.fill")
                         }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FieldsListCell: View {
     
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
         VStack {
             ZStack {
@@ -16,7 +17,8 @@ struct FieldsListCell: View {
                     .resizable()
                     .frame(width: UIScreen.main.bounds.width*0.9 , height: UIScreen.main.bounds.height*0.25 )
                     .cornerRadius(20)
-                    .shadow(radius: 10)
+                    .shadow(color: colorScheme == .dark ? Color.white.opacity(0.4) : Color.black.opacity(0.4), radius: 1)
+                    //.shadow(radius: 10)
             }.edgesIgnoringSafeArea(.top)
             HStack {
                 Text("Astana Arena")
@@ -51,14 +53,6 @@ struct FieldsListCell: View {
             .padding(.trailing, 10)
             .padding(.leading, 20)
             .padding(.trailing, 20)
-            
         }
-    }
-}
-
-
-struct FieldsListCell_Previews: PreviewProvider {
-    static var previews: some View {
-        FieldsListCell()
     }
 }

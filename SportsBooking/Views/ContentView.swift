@@ -10,12 +10,8 @@ import UIKit
 import Firebase
 
 struct ContentView: View {
-    @ObservedObject var currentUserSession = UserSession()
+    @ObservedObject var userSession = UserSession()
     //@Environment(\.colorScheme) var colorScheme
-    func isUserLoggedIn() -> Bool {
-      return Auth.auth().currentUser != nil
-    }
-    
     init() {
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         UINavigationBar.appearance().shadowImage = UIImage()
@@ -29,14 +25,14 @@ struct ContentView: View {
     var body: some View {
             
         Group {
-            if currentUserSession.userLogedIn {
+            if userSession.userLogedIn {
                 TabView {
-                    HomeScreen(currentUserSession: currentUserSession)
+                    HomeScreen(userSession: userSession)
                         .tabItem {
                             Label("Главная", systemImage: "house.fill")
                         }
                         .tag(0)
-                    ProfileScreen(currentUserSession: currentUserSession)
+                    ProfileScreen(currentUserSession: userSession)
                         .tabItem {
                             Label("Профиль", systemImage: "person.circle.fill")
                         }
@@ -45,7 +41,7 @@ struct ContentView: View {
                 .accentColor(.red)
             }
             else {
-                LoginView(currentUserSession: currentUserSession)
+                LoginView(currentUserSession: userSession)
             }
         }
         

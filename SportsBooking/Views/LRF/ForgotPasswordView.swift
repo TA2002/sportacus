@@ -214,6 +214,13 @@ let lightGreyColor = Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255
 let lightGreenColor = Color(red: 21.0/255.0, green: 183.0/255.0, blue: 177.0/255.0, opacity: 1.0)
 let lightblueColor = Color(#colorLiteral(red: 0.9580881, green: 0.10593573, blue: 0.3403331637, alpha: 1)) //Color(red: 85.0/255.0, green: 84.0/255.0, blue: 166.0/255.0, opacity: 1.0)
 
+
+let bgHexColor = Color(hex: "#f3f4f6")
+let filterOrangeColor = Color(hex: "#ed702d")
+let blackColor = Color(hex: "#3f3d43")
+let grayColor = Color(hex: "#8d8d8f")
+let hourGrayColor = Color(hex: "#8c8b8e")
+
 struct buttonWithBackground: View {
     
     var btnText: String

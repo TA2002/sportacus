@@ -20,12 +20,12 @@ struct FootballFacility: Identifiable {
             averageRating = averageRating / Double(reviews.count)
         }
     }
-    var photoUrls: [URL]
+    var photoUrls: [String]
     var schedule: Schedule
     var averageRating: Double
     var footballPitches: [FootballPitch]
     
-    init(id: Int, name: String, address: String, reviews: [Review], photoUrls: [URL], schedule: Schedule, footballPitches: [FootballPitch]) {
+    init(id: Int, name: String, address: String, reviews: [Review], photoUrls: [String], schedule: Schedule, footballPitches: [FootballPitch]) {
         self.id = id
         self.name = name
         self.address = address
@@ -43,3 +43,9 @@ struct FootballFacility: Identifiable {
     
 }
 
+
+extension Double {
+    var clean: String {
+       return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
+    }
+}

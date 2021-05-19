@@ -1,4 +1,5 @@
 PODS:
+  - ActivityIndicatorView (0.0.6)
   - Firebase/Analytics (7.11.0):
     - Firebase/Core
   - Firebase/Auth (7.11.0):
@@ -98,16 +99,20 @@ PODS:
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
   - PromisesObjC (1.2.12)
+  - SwiftDate (6.3.1)
   - Tagly (0.1.1)
 
 DEPENDENCIES:
+  - ActivityIndicatorView
   - Firebase/Analytics
   - Firebase/Auth
   - Firebase/Database
+  - SwiftDate
   - Tagly (~> 0.1)
 
 SPEC REPOS:
   trunk:
+    - ActivityIndicatorView
     - Firebase
     - FirebaseAnalytics
     - FirebaseAuth
@@ -122,9 +127,11 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - PromisesObjC
+    - SwiftDate
     - Tagly
 
 SPEC CHECKSUMS:
+  ActivityIndicatorView: f7c08841e302c86d16c29b7c9554fce2a2bd9183
   Firebase: c121feb35e4126c0b355e3313fa9b487d47319fd
   FirebaseAnalytics: cd3bd84d722a24a8923918af8af8e5236f615d77
   FirebaseAuth: 5fe4585c2ed847319f0ea68bd1d82c77e49ff9a0
@@ -139,8 +146,9 @@ SPEC CHECKSUMS:
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
+  SwiftDate: 72d28954e8e1c6c1c0f917ccc8005e4f83c7d4b2
   Tagly: deb459c698853a3fffce027fedb92dcb7cf5c68e
 
-PODFILE CHECKSUM: 80fc4ca8046f842ef5821ce8805441f4b9820546
+PODFILE CHECKSUM: 2d3dfea4e06ffa222a3e307b7027e12e210d4653
 
 COCOAPODS: 1.10.1

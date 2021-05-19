@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LunBo: View {
-    private var images: [Image]
+    private var images: [String]
     private var height: CGFloat
     private let threshold: CGFloat = 120
     private let width = UIScreen.main.bounds.width
@@ -56,7 +56,7 @@ struct LunBo: View {
             }
         }
     
-    init(images: [Image], height: CGFloat, index: Binding<Int>) {
+    init(images: [String], height: CGFloat, index: Binding<Int>) {
         self.images = images
         self.height = height
         self._now_img_index = index
@@ -67,10 +67,8 @@ struct LunBo: View {
             
             HStack(spacing: 0) {
                 ForEach(images.indices, id: \.self) { index in
-                    images[index]
-                        .resizable()
-                        .frame(width: width, height: height)
-                        .scaledToFill()
+                    RemoteImage(url: images[index])
+                        //.scaledToFill()
                 }
             }
             .offset(x: total_x_offset)

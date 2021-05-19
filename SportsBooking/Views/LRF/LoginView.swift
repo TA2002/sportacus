@@ -42,7 +42,7 @@ struct LoginView: View {
                         Image("ic_email")
                             .padding(.leading, (UIScreen.main.bounds.width * 20) / 414)
                         
-                        TextField("Email", text: $email)
+                        TextField("Электронный адрес", text: $email)
                             .frame(height: (UIScreen.main.bounds.width * 40) / 414, alignment: .center)
                             .padding(.leading, (UIScreen.main.bounds.width * 10) / 414)
                             .padding(.trailing, (UIScreen.main.bounds.width * 10) / 414)
@@ -61,7 +61,7 @@ struct LoginView: View {
                         Image("ic_password")
                             .padding(.leading, (UIScreen.main.bounds.width * 20) / 414)
                         
-                        SecureField("Password", text: $password)
+                        SecureField("Пароль", text: $password)
                             .frame(height: (UIScreen.main.bounds.width * 40) / 414, alignment: .center)
                             .padding(.leading, (UIScreen.main.bounds.width * 10) / 414)
                             .padding(.trailing, (UIScreen.main.bounds.width * 10) / 414)
@@ -81,7 +81,7 @@ struct LoginView: View {
                         Button(action: {
                             self.showForgotPassword = true
                         }) {
-                            Text("Forgot Password?")
+                            Text("Забыли Пароль?")
                                 .foregroundColor(lightblueColor)
                                 .font(.system(size: (UIScreen.main.bounds.width * 15) / 414, weight: .bold, design: .default))
                             
@@ -107,7 +107,7 @@ struct LoginView: View {
                         }
                         
                     }) {
-                        buttonWithBackground(btnText: "LOGIN")
+                        buttonWithBackground(btnText: "Войти")
                     }
                     Spacer()
                 }
@@ -117,7 +117,7 @@ struct LoginView: View {
                     Button(action: {
                         self.showSignup = true
                     }) {
-                        Text("New User? Create an account")
+                        Text("У вас нет учетной записи? Зарегистрироваться")
                             .foregroundColor(lightblueColor)
                             .font(.system(size: (UIScreen.main.bounds.width * 15) / 414, weight: .bold, design: .default))
                         
@@ -155,16 +155,7 @@ struct LoginView: View {
                 }
             }
             else {
-                print("User signs in successfully")
                 currentUserSession.userDidLogIn()
-                //let userInfo = Auth.auth().currentUser
-                //print(userInfo)
-                //let email = userInfo?.email
-//                self.alertMsg = LoginMessage.success.rawValue
-//                self.showAlert.toggle()
-//                UserDefaults.standard.set(true, forKey: "Loggedin")
-//                UserDefaults.standard.synchronize()
-                //self.settings.loggedIn = true
             }
         }
     }
@@ -172,19 +163,19 @@ struct LoginView: View {
     fileprivate func isValidInputs() -> Bool {
         
         if self.email == "" {
-            self.alertMsg = "Email can't be blank."
+            self.alertMsg = "Адрес эл. почты не может быть пустым."
             self.showAlert.toggle()
             return false
         } else if !self.email.isValidEmail {
-            self.alertMsg = "Email is not valid."
+            self.alertMsg = "Неверный формат эл. почты."
             self.showAlert.toggle()
             return false
         } else if self.password == "" {
-            self.alertMsg = "Password can't be blank."
+            self.alertMsg = "Пароль не может быть пустым."
             self.showAlert.toggle()
             return false
         } else if !(self.password.isValidPassword) {
-            self.alertMsg = "Please enter valid password"
+            self.alertMsg = "Введенный пароль состоит из меньше чем 6 символов."
             self.showAlert.toggle()
             return false
         }

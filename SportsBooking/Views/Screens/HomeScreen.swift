@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+import ActivityIndicatorView
 
 struct HomeScreen: View {
     @ObservedObject var userSession: UserSession
@@ -36,6 +37,7 @@ struct HomeScreen: View {
     }
     
     @State var searchBarText: String = ""
+    @State private var showLoadingIndicator: Bool = true
     
     var body: some View {
         NavigationView {
@@ -45,15 +47,31 @@ struct HomeScreen: View {
                     VStack() {
                         CustomNavigationBar(searchBarText: $searchBarText)
                         
-                        ScrollView(showsIndicators: false) {
-                            VStack(alignment: .center) {
-                                FieldsListCell(field: Field(name: "Football Life", address: "Алихан Бокейхан 2", pricePerHour: 10000, voteRating: 4.5, numberOfVotes: 298, isFavorite: true), size: geometry.size, userSession: userSession)
+                        Group {
+                            if userSession.footballFacilities.count > 0 {
+                                ScrollView(showsIndicators: false) {
+                                    VStack(alignment: .center) {
+                                        ForEach(0..<userSession.footballFacilities.count, id: \.self) { index in
+                                            NavigationLink(destination: DetailsScreen(userSession: userSession, footballFacility: userSession.footballFacilities[index], for: geometry.size)) {
+                                                FieldsListCell(footballFacility: userSession.footballFacilities[index], size: geometry.size, userSession: userSession)
+                                                    .padding(.horizontal, cellHorizontalPadding)
+                                                    .padding(.top, 10)
+                                            }
+                                        }
+                                    }
                                     
-                                
+                                }
                             }
-                            .padding(.horizontal, cellHorizontalPadding)
-                            .padding(.top, 10)
+                            else {
+                                ZStack {
+                                    Rectangle().fill(bgHexColor)
+                                    ActivityIndicatorView(isVisible: self.$showLoadingIndicator, type: .default)
+                                                            .frame(width: 30, height: 30)
+                                                            .foregroundColor(.red)
+                                }
+                            }
                         }
+                        
                         
                     }
                 }

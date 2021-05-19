@@ -33,7 +33,7 @@ struct ForgotPasswordView: View {
                     
                     Spacer(minLength: 80)
                     
-                    Text("Write your email address in the text box and we will send you a verification code to reset your password.")
+                    Text("Пожалуйста введите ваш электроный адрес в поле снизу и мы отправим на него письмо для сброса пароля.")
                         .font(.body)
                         .padding()
                         .fixedSize(horizontal: false, vertical: true)
@@ -46,7 +46,7 @@ struct ForgotPasswordView: View {
                                 .padding(.leading, 20)
                             
                             
-                            TextField("Email", text: $email)
+                            TextField("Электронный адрес", text: $email)
                                 .frame(height: 40, alignment: .center)
                                 .padding(.leading, 10)
                                 .padding(.trailing, 10)
@@ -70,7 +70,7 @@ struct ForgotPasswordView: View {
 
                     }) {
                         
-                        buttonWithBackground(btnText: "SUBMIT")
+                        buttonWithBackground(btnText: "Отправить")
                     }
                     
                 }
@@ -115,12 +115,12 @@ struct ForgotPasswordView: View {
     func isValidInputs() -> Bool {
         
         if self.email == "" {
-            self.alertMsg = "Email can't be blank."
+            self.alertMsg = "Адрес эл. почты не может быть пустым."
             self.showAlert.toggle()
             return false
             
         } else if !self.email.isValidEmail {
-            self.alertMsg = "Email is not valid."
+            self.alertMsg = "Неверный формат эл. почты."
             self.showAlert.toggle()
             return false
         }
@@ -177,9 +177,9 @@ extension String {
     
     var isValidPassword: Bool {
         let minPasswordLength = 6
-        let passwordRegex = "^(?=.*[a-z])(?=.*[@$!%*#?&])[0-9a-zA-Z@$!%*#?&]{8,}"
-        let predicate = NSPredicate(format:"SELF MATCHES %@", passwordRegex)
-        return predicate.evaluate(with:self) && self.count >= minPasswordLength
+        //let passwordRegex = "^(?=.*[a-z])(?=.*[@$!%*#?&])[0-9a-zA-Z@$!%*#?&]{8,}"
+        //let predicate = NSPredicate(format:"SELF MATCHES %@", passwordRegex)
+        return self.count >= minPasswordLength //predicate.evaluate(with:self) && 
     }
     
     var isValidPhone: Bool {

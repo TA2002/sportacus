@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ImageDetail: View {
-    private var images: [Image]
+    private var images: [String]
     
     private var last_index: Int {
         images.count - 1
@@ -127,7 +127,7 @@ struct ImageDetail: View {
         pre_x_offset = 0
     }
     
-    init(images: [Image], now_index: Binding<Int>) {
+    init(images: [String], now_index: Binding<Int>) {
         self.images = images
         self._now_index = now_index
     }
@@ -140,15 +140,13 @@ struct ImageDetail: View {
                 .edgesIgnoringSafeArea(.all)
             
             HStack(spacing: 0) {
-                images[pre_index]
-                    .resizable()
-                    .scaledToFit()
+                RemoteImage(url: images[pre_index])
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: UIScreen.main.bounds.width)
                     .offset(x: now_x_offset)
                 
-                images[now_index]
-                    .resizable()
-                    .scaledToFit()
+                RemoteImage(url: images[pre_index])
+                    .aspectRatio(contentMode: .fill)
                     .scaleEffect(now_scale >= 1 ? 1 : now_scale)
                     .frame(width: now_scale >= 1 ? frame_width : screen_width)
                     .offset(x: now_x_offset)
@@ -156,9 +154,8 @@ struct ImageDetail: View {
                     .gesture(drag)
                     .gesture(scaling)
                     
-                images[next_index]
-                    .resizable()
-                    .scaledToFit()
+                RemoteImage(url: images[pre_index])
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: UIScreen.main.bounds.width)
                     .offset(x: now_x_offset)
                 

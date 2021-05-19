@@ -9,13 +9,19 @@ import SwiftUI
 
 struct WorkTimeView: View {
     
+    private var schedule: Schedule
+    
+    init(schedule: Schedule) {
+        self.schedule = schedule
+    }
+    
     var body: some View {
         VStack {
             HStack {
                 Text("Пн-Пт")
                     .font(.system(size: customSize, weight: .regular, design: .default)).foregroundColor(blackColor)
                 Spacer()
-                Text("08:00-21:00")
+                Text("\(schedule.workdays.timeFormatter)")
                     .font(.system(size: customSize, weight: .regular, design: .default)).foregroundColor(blackColor)
             }
             
@@ -23,14 +29,14 @@ struct WorkTimeView: View {
                 Text("Суббота")
                     .font(.system(size: customSize, weight: .regular, design: .default)).foregroundColor(blackColor)
                 Spacer()
-                Text("08:00-21:00")
+                Text("\(schedule.saturday.timeFormatter)")
                     .font(.system(size: customSize, weight: .regular, design: .default)).foregroundColor(blackColor)
             }
             HStack {
                 Text("Воскресенье")
                     .font(.system(size: customSize, weight: .regular, design: .default)).foregroundColor(blackColor)
                 Spacer()
-                Text("08:00-21:00")
+                Text("\(schedule.sunday.timeFormatter)")
                     .font(.system(size: customSize, weight: .regular, design: .default)).foregroundColor(blackColor)
             }
         }
@@ -41,3 +47,4 @@ struct WorkTimeView: View {
     }
     
 }
+

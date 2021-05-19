@@ -12,24 +12,22 @@ struct DetailsScreen: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    @ObservedObject var userSession: UserSession = UserSession()
+    @ObservedObject var userSession: UserSession
     
     @State private var isFavorite: Bool = false
     @State var sheetIsPresented = false
     @State var lunbo_img_index: Int = 0
     @State var show_img_detail: Bool = false
     
-    var field: Field
+    var footballFacility: FootballFacility
+    
     private var size: CGSize
     
-    
-    private var tags = ["Душ", "Искусственная трава", "Телевизор", "Раздевалка"]
-    let images: [Image] = [Image("court"), Image("court"), Image("court")]
-    
-    init(field: Field, for size: CGSize) {
+    init(userSession: UserSession, footballFacility: FootballFacility, for size: CGSize) {
+        self.userSession = userSession
         UINavigationBar.appearance().tintColor = UIColor.white
         self.size = size
-        self.field = field
+        self.footballFacility = footballFacility
         //print(300 / size.width)
         //UINavigationBar.appearance().color
     }
@@ -37,29 +35,25 @@ struct DetailsScreen: View {
     private var numberOfFields = 1
     
     var body: some View {
-        return GeometryReader { geometry in
+        GeometryReader { geometry in
             ZStack(alignment: .bottom) {
                 Color.white
                 VStack {
                     ScrollView(.vertical) {
                         VStack {
-                            ZStack {
-                                LunBo(images: images, height: computedImageHeight(for: size), index: $lunbo_img_index)
-                                    .onTapGesture {
-                                        show_img_detail = true
-                                    }
-                                        
-                                        if show_img_detail {
-                                            ImageDetail(images: images, now_index: $lunbo_img_index)
-                                                .onTapGesture {
-                                                    show_img_detail = false
-                                                }
-                                        }
-                            }
+                            LunBo(images: footballFacility.photoUrls, height: computedImageHeight(for: size), index: $lunbo_img_index)
                             .edgesIgnoringSafeArea(.all)
+//                            ImageCarouselView(numberOfImages: footballFacility.photoUrls.count) {
+//                                ForEach(0..<footballFacility.photoUrls.count) { photoIndex in
+//                                    RemoteImage(url: footballFacility.photoUrls[photoIndex])
+//                                        .aspectRatio(contentMode: .fill)
+//                                        .frame(width: size.width, height: computedImageHeight(for: size))
+//                                }
+//                            }
+//                            .edgesIgnoringSafeArea(.all)
                             
                             HStack {
-                                Text(field.name)
+                                Text(footballFacility.name)
                                     .font(.system(size: nameFontSize, weight: .heavy, design: .default))
                                     .foregroundColor(blackColor)
                                 Spacer()
@@ -72,7 +66,7 @@ struct DetailsScreen: View {
                                     .scaledToFit()
                                     .frame(width: reviewsFontSize, height: reviewsFontSize)
                                     .clipped()
-                                Text("4.5 (290 отзывов) ・ Алихана Бокейхана 2 ")
+                                Text("\(footballFacility.averageRating.clean) (\(footballFacility.reviews.count) отзывов) ・ Алихана Бокейхана 2 ")
                                     .font(.system(size: reviewsFontSize, weight: .regular, design: .default)).foregroundColor(.secondary)
                                     .foregroundColor(grayColor)
                                 Spacer()
@@ -84,10 +78,10 @@ struct DetailsScreen: View {
                             Divider().border(Color.gray, width: 5).padding()
                             
                             Group {
-                                if numberOfFields > 1 {
+                                if footballFacility.footballPitches.count > 1 {
                                     HStack() {
                                         Spacer()
-                                        ForEach(0..<numberOfFields){ index in
+                                        ForEach(0..<footballFacility.footballPitches.count, id: \.self){ index in
                                             Button(action: {
                                                 buttonIndex = index
                                             }, label: {
@@ -100,7 +94,7 @@ struct DetailsScreen: View {
                                             .background(index == buttonIndex ? filterOrangeColor : bgHexColor)
                                             .cornerRadius(10)
                                             Group(){
-                                                if index != numberOfFields - 1 {
+                                                if index != footballFacility.footballPitches.count - 1 {
                                                     Spacer()
                                                 }
                                             }
@@ -113,7 +107,7 @@ struct DetailsScreen: View {
                                 
                             }
                             
-                            Text("50×50 ・ Крытое ・ Искусственная трава")
+                            Text("\(footballFacility.footballPitches[buttonIndex].lengthInMeters)×\(footballFacility.footballPitches[buttonIndex].widthInMeters) ・ \(footballFacility.footballPitches[buttonIndex].type) ・ \(footballFacility.footballPitches[buttonIndex].floorMaterial)")
                                 .font(.system(size: customSize, weight: .semibold, design: .default))
                                 .foregroundColor(blackColor)
                                 .padding(.horizontal)
@@ -128,7 +122,7 @@ struct DetailsScreen: View {
                                 .padding(.top, 15)
                             
                             
-                            TagCloudView(data: tags, spacing: 10) { tag in
+                            TagCloudView(data: footballFacility.footballPitches[buttonIndex].conveniences, spacing: 10) { tag in
                                 Text(tag)
                                     .font(.system(size: customSize, weight: .light, design: .default))
                                     //.font(.system(size: reviewsFontSize, weight: .regular, design: .default))
@@ -149,7 +143,7 @@ struct DetailsScreen: View {
                                 .padding(.vertical, 5)
                             
                             
-                            WorkTimeView()
+                            WorkTimeView(schedule: footballFacility.schedule)
                                 .padding(.vertical, 5)
                                 .padding(.horizontal)
                             
@@ -164,7 +158,7 @@ struct DetailsScreen: View {
                         HStack {
                             Spacer()
                             HStack {
-                                Text("10.000₸")
+                                Text("\(footballFacility.footballPitches[buttonIndex].pricePerHour.formattedWithSeparator)₸")
                                     .font(.system(size: priceFontSize, weight: .heavy, design: .default))
                                     .foregroundColor(blackColor)
                                 Text("/ час")
@@ -173,29 +167,40 @@ struct DetailsScreen: View {
                             }
                             .padding()
                             Spacer()
-                            Button(action: {
-                                
-                            }, label: {
-                                Text("Забронировать")
-                                    .bold()
-                                    .foregroundColor(.white)
-                            })
-                            .padding()
-                            .frame(width: geometry.size.width * 0.5)
-                            .background(filterOrangeColor)
-                            .cornerRadius(8)
-                            .padding(.vertical)
+                            Text("Забронировать")
+                                .bold()
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(width: geometry.size.width * 0.5)
+                                .background(filterOrangeColor)
+                                .cornerRadius(8)
+                                .padding(.vertical)
+                                .onTapGesture {
+                                    userSession.createNewBookingSession(footballFacility: footballFacility, footballPitch: footballFacility.footballPitches[buttonIndex])
+                                    if userSession.datesForBooking != nil {
+                                        userSession.downloadClosedSessions(footballFacilityId: footballFacility.id, footballPitchId: footballFacility.footballPitches[buttonIndex].id, date: userSession.datesForBooking![0])
+                                    }
+                                    sheetIsPresented = true
+                                }
+//                                NavigationLink(
+//                                    destination: BookingScreen(userSession: userSession, footballFacility: footballFacility, footballPitch: footballFacility.footballPitches[buttonIndex]),
+//                                    label: {
+//
+//                                })
                             Spacer()
                         }
                         
                     }
+                    .sheet(isPresented: $sheetIsPresented, content: {
+                        BookingScreen(userSession: userSession, footballFacility: footballFacility, footballPitch: footballFacility.footballPitches[buttonIndex])
+                            .environment(\.showingSheet, self.$sheetIsPresented)
+                    })
                 }
             }
-            .sheet(isPresented: $sheetIsPresented) {
-                    BookingScreen()
-            }
         }
+        
         .edgesIgnoringSafeArea([.top, .horizontal])
+        //.navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading: ZStack(alignment: .center) {
@@ -241,7 +246,7 @@ struct DetailsScreen: View {
     }
     
     private var priceFontSize: CGFloat {
-        (UIScreen.main.bounds.height) / 45
+        max((UIScreen.main.bounds.height) / 45, 17)
     }
     
     private var nameFontSize: CGFloat {

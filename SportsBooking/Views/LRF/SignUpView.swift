@@ -63,7 +63,7 @@ struct SignUpView: View {
                         Image("ic_user")
                             .padding(.leading, 20)
                         
-                        TextField("First Name", text: $firstName)
+                        TextField("Имя", text: $firstName)
                             .frame(height: 40, alignment: .center)
                             .padding(.leading, 10)
                             .padding(.trailing, 10)
@@ -82,7 +82,7 @@ struct SignUpView: View {
                         Image("ic_user")
                             .padding(.leading, 20)
                         
-                        TextField("Last Name", text: $lastName)
+                        TextField("Фамилия", text: $lastName)
                             .frame(height: 40, alignment: .center)
                             .padding(.leading, 10)
                             .padding(.trailing, 10)
@@ -100,7 +100,7 @@ struct SignUpView: View {
                         Image("ic_email")
                             .padding(.leading, 20)
                         
-                        TextField("Email", text: $email)
+                        TextField("Электронный адрес", text: $email)
                             .frame(height: 40, alignment: .center)
                             .padding(.leading, 10)
                             .padding(.trailing, 10)
@@ -120,7 +120,7 @@ struct SignUpView: View {
                         Image("ic_contactno")
                             .padding(.leading, 20)
                         
-                        TextField("Contact No", text: $contactNo)
+                        TextField("Номер телефона", text: $contactNo)
                             .frame(height: 40, alignment: .center)
                             .padding(.leading, 10)
                             .padding(.trailing, 10)
@@ -159,7 +159,7 @@ struct SignUpView: View {
                         Image("ic_password")
                             .padding(.leading, 20)
                         
-                        SecureField("Password", text: $password)
+                        SecureField("Пароль", text: $password)
                             .frame(height: 40, alignment: .center)
                             .padding(.leading, 10)
                             .padding(.trailing, 10)
@@ -177,7 +177,7 @@ struct SignUpView: View {
                         Image("ic_password")
                             .padding(.leading, 20)
                         
-                        SecureField("Confirm Password", text: $confirmPassword)
+                        SecureField("Подтверждение пароля", text: $confirmPassword)
                             .frame(height: 40, alignment: .center)
                             .padding(.leading, 10)
                             .padding(.trailing, 10)
@@ -272,44 +272,39 @@ struct SignUpView: View {
     fileprivate func isValidInputs() -> Bool {
         
         if self.firstName == "" {
-            self.alertMsg = "First name can't be blank."
+            self.alertMsg = "Поле имя не может быть пустым."
             self.showAlert.toggle()
             return false
         } else if self.lastName == "" {
-            self.alertMsg = "Last name can't be blank."
+            self.alertMsg = "Поле фамилия не может быть пустым."
             self.showAlert.toggle()
             return false
         } else if self.email == "" {
-            self.alertMsg = "Email can't be blank."
+            self.alertMsg = "Адрес эл. почты не может быть пустым."
             self.showAlert.toggle()
             return false
         } else if !self.email.isValidEmail {
-            self.alertMsg = "Email is not valid."
+            self.alertMsg = "Неверный формат эл. почты."
             self.showAlert.toggle()
             return false
         }  else if self.contactNo == "" {
-            self.alertMsg = "Phone number can't be blank."
+            self.alertMsg = "Номер телефона не может быть пустым."
             self.showAlert.toggle()
             return false
-//        } else if self.dob == "" {
-//            self.alertMsg = "Date of birth can't be blank."
-//            self.showAlert.toggle()
-//            return false
-//        }
         } else if self.password == "" {
-            self.alertMsg = "Password can't be blank."
+            self.alertMsg = "Пароль не может быть пустым."
             self.showAlert.toggle()
             return false
         } else if !(self.password.isValidPassword) {
-            self.alertMsg = "Please enter valid password"
+            self.alertMsg = "Длина пароля не может быть меньше 6 символов."
             self.showAlert.toggle()
             return false
         } else if self.confirmPassword == "" {
-            self.alertMsg = "Confirm password can't be blank."
+            self.alertMsg = "Подтверждение пароля не может быть пустым."
             self.showAlert.toggle()
             return false
         } else if self.password != self.confirmPassword {
-            self.alertMsg = "Password and confirm password dose not matched."
+            self.alertMsg = "Введенные пароли не совпадают."
             self.showAlert.toggle()
             return false
         }

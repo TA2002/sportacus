@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import Firebase
 import Combine
+import SwiftDate
 
 class UserSession: ObservableObject {
     @Published var userLogedIn: Bool = false
@@ -19,9 +20,77 @@ class UserSession: ObservableObject {
     private var cancellable: AnyCancellable?
     private var usersObserve: AnyCancellable?
     
+    private var bookingObserver: AnyCancellable?
+    
+    var footballFacilities: [FootballFacility] {
+        self.model.footballFacilities
+    }
+    
+    var profile: Profile {
+        self.model.profile
+    }
+    
+    var datesForBooking: [DateInRegion]? {
+        self.model.datesForBooking
+    }
+    
+    var availableTimeSessionsForBooking: [String: [TimeSession]] {
+        self.model.availableTimeSessionsForBooking
+    }
+    
+    var closedTimesSessions: [TimeSession]? {
+        self.model.closedTimesSessions
+    }
+    
+    func createNewBookingSession(footballFacility: FootballFacility, footballPitch: FootballPitch) {
+        self.model.createNewBookingSession(footballFacility: footballFacility, footballPitch: footballPitch)
+    }
+    
+    func sessionsFor(date: DateInRegion) -> [TimeSession] {
+        self.model.availableTimeSessionsForBooking["\(date.day).\(date.month).\(date.year)"]!
+    }
+    
+    func downloadClosedSessions(footballFacilityId: Int, footballPitchId: Int, date: DateInRegion) {
+        let dateString = "\(date.day)-\(date.month)-\(date.year)"
+        let bookingsRef = Database.database(url: "https://sportacus-dd671-default-rtdb.asia-southeast1.firebasedatabase.app").reference().child(dateString).child("\(footballFacilityId)").child("\(footballPitchId)")
+        
+        bookingsRef.removeAllObservers()
+        model.closedTimesSessions = nil
+        
+        bookingsRef.observe(.value, with: { (snapshot) in
+            var value = snapshot.value as? [[String: Int]] ?? [[String: Int]]()
+            self.model.closedTimesSessions = []
+            for session in value {
+                self.model.closedTimesSessions?.append(TimeSession(from: session))
+            }
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+        
+    }
+    
+    func bookSession(footballFacilityId: Int, footballPitchId: Int, date: DateInRegion, sessionsForBooking: [TimeSession]) {
+        let dateString = "\(date.day)-\(date.month)-\(date.year)"
+        let bookingsRef = Database.database(url: "https://sportacus-dd671-default-rtdb.asia-southeast1.firebasedatabase.app").reference().child(dateString).child("\(footballFacilityId)").child("\(footballPitchId)")
+        
+        var propertyLists: [[String: Any]] = [[String: Any]]()
+        
+        for index in (0..<sessionsForBooking.count) {
+            propertyLists.append(sessionsForBooking[index].asPropertyList())
+        }
+        
+        bookingsRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            var value = snapshot.value as? [[String: Any]] ?? [[String: Any]]()
+            value.append(contentsOf: propertyLists)
+            bookingsRef.setValue(value)
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
+    
     init() {
-        var facilities = [FootballFacility]()
-        var profile = Profile(email: "", firstName: "", lastName: "", phoneNumber: "", favoriteIds: [])
+        let facilities = [FootballFacility]()
+        let profile = Profile(email: "", firstName: "", lastName: "", phoneNumber: "", favoriteIds: [])
         
         self.model = SportsBooking(footballFacilities: facilities, profile: profile)
         userLogedIn = isUserLoggedIn()
@@ -35,7 +104,39 @@ class UserSession: ObservableObject {
         cancellable = $userLogedIn.sink { isLogedIn in
             if isLogedIn {
                 print("jhey")
+                
 
+                var currentTimeStamp: TimeInterval?
+
+                let ref = Database.database(url: "https://sportacus-dd671-default-rtdb.asia-southeast1.firebasedatabase.app").reference().child("serverTimestamp")
+
+                ref.setValue(ServerValue.timestamp())
+
+                ref.observeSingleEvent(of: .value, with: { snap in
+                    if let t = snap.value as? TimeInterval {
+                        
+                        currentTimeStamp = t/1000
+                        let timeString = "\(Date(timeIntervalSince1970: currentTimeStamp ?? TimeInterval(0)))"
+                        var date = ""
+                        var cnt = 0
+                        for char in timeString {
+                            if char == " " {
+                                cnt += 1
+                                if cnt == 2 {
+                                    break
+                                }
+                                else {
+                                    date.append(" ")
+                                }
+                            }
+                            else {
+                                date.append(char)
+                            }
+                        }
+                        self.model.changeDate(date: date)
+                    }
+                })
+                
                 profileRef.child("\(String(describing: Auth.auth().currentUser!.uid))").observeSingleEvent(of: .value) { snapshot in
                     if let userDict = snapshot.value as? [String:Any] {
                         let firstName = userDict["firstName"] as? String ?? ""
@@ -46,9 +147,9 @@ class UserSession: ObservableObject {
                         self.model.createProfile(profile: Profile(email: email, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, favoriteIds: favoriteIds))
                     }
                     profileRef.removeAllObservers()
-                    print(self.model.profile)
+                    //print(self.model.profile)
                 }
-                
+
                 sportsFacilitiesRef.observeSingleEvent(of: .value) { snapshot in
                     for child in snapshot.children {
                         let childSnapshot = snapshot.childSnapshot(forPath: (child as AnyObject).key)
@@ -68,15 +169,15 @@ class UserSession: ObservableObject {
                                 }
                             }
 
-                            var photoUrls = [URL]()
+                            var photoUrls = [String]()
 
                             for photoUrl in childSnapshot.childSnapshot(forPath: "photoUrls").children {
                                 let photoSnapshot = childSnapshot.childSnapshot(forPath: "photoUrls").childSnapshot(forPath: (photoUrl as AnyObject).key)
-                                photoUrls.append(URL(string: photoSnapshot.value as? String ?? "")!)
+                                photoUrls.append(photoSnapshot.value as? String ?? "") //URL(string: )!
                             }
 
                             var schedule: Schedule
-                            
+
                             let days = ["workdays", "saturday", "sunday"]
                             var timeSessions: [TimeSession] = []
                             for day in days {
@@ -86,11 +187,11 @@ class UserSession: ObservableObject {
                                 let finishMinutes = childSnapshot.childSnapshot(forPath: "schedule").childSnapshot(forPath: day).childSnapshot(forPath: "finishMinutes").value as? Int ?? 0
                                 timeSessions.append(TimeSession(startHours: startHours, startMinutes: startMinutes, finishHours: finishHours, finishMinutes: finishMinutes))
                             }
-                            
+
                             schedule = Schedule(workdays: timeSessions[0], saturday: timeSessions[1], sunday: timeSessions[2])
-                            
+
                             var footballPitches = [FootballPitch]()
-                            
+
                             for pitch in childSnapshot.childSnapshot(forPath: "footballPitches").children {
                                 let pitchSnapshot = childSnapshot.childSnapshot(forPath: "footballPitches").childSnapshot(forPath: (pitch as AnyObject).key)
                                 let conveniences = pitchSnapshot.childSnapshot(forPath: "conveniences").value as? [String] ?? []
@@ -103,7 +204,7 @@ class UserSession: ObservableObject {
                                 footballPitches.append(FootballPitch(id: id, type: type, floorMaterial: floorMaterial, lengthInMeters: lengthInMeters, widthInMeters: widthInMeters, conveniences: conveniences, pricePerHour: pricePerHour))
                             }
                             self.model.addFootballFacility(footballFacility: FootballFacility(id: id, name: name, address: address, reviews: reviews, photoUrls: photoUrls, schedule: schedule, footballPitches: footballPitches))
-                            print(self.model.footballFacilities)
+                            //print(self.model.footballFacilities)
                         }
 
                     }
@@ -121,30 +222,9 @@ class UserSession: ObservableObject {
             }
         }
         
-        
-
-    
-        
-        
     }
-//
-//    private func createSportsBooking() -> SportsBooking {
-//        private let database = Database.database(url: "https://sportacus-dd671-default-rtdb.asia-southeast1.firebasedatabase.app").reference()
-//
-//
-//        let firstName = database.child("users").child("\(String(describing: Auth.auth().currentUser!.uid))").child("firstName")
-//
-//        let sportsFacilities = FootballFacility(id: <#T##Int#>, name: <#T##String#>, address: <#T##String#>, reviews: <#T##[Review]#>, photoUrls: <#T##[URL]#>, schedule: <#T##TimeSession#>, footballPitches: <#T##[FootballPitch]#>)
-//
-//        let profile = Profile(email: firstName, firstName: firstName, lastName: firstName, phoneNumber: firstName)
-//
-//        return SportsBooking(footballFacilities: sportsFacilities, profile: profile)
-////        database.child("users").child("\(String(describing: Auth.auth().currentUser!.uid))").child("lastName").setValue(lastName)
-////        database.child("users").child("\(String(describing: Auth.auth().currentUser!.uid))").child("email").setValue(email)
-////        database.child("users").child("\(String(describing: Auth.auth().currentUser!.uid))").child("phoneNumber").setValue(contactNo)
-////        var profile: Profile = Profile(email: "", firstName: "", lastName: "", phoneNumber: "")
-//    }
-//
+    
+    
     func addFootballFacility(footballFacility: FootballFacility) {
         model.addFootballFacility(footballFacility: footballFacility)
     }
@@ -156,16 +236,16 @@ class UserSession: ObservableObject {
     func userDidLogIn() {
         userLogedIn = true
         //UserDefaults.standard.set(true, forKey: "userLogedIn")
-        print(Auth.auth().currentUser?.email ?? "")
+        //print(Auth.auth().currentUser?.email ?? "")
     }
     
     func userDidLogOut() {
         do {
             try Auth.auth().signOut()
             userLogedIn = false
-            print("userLogenIn: \(userLogedIn)")
+            //print("userLogenIn: \(userLogedIn)")
         } catch {
-          print("Sign out error")
+          //print("Sign out error")
         }
     }
     

@@ -46,14 +46,19 @@ struct RemoteImage: View {
         selectImage()
             .resizable()
             .scaledToFill()
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width * 0.6)
+            .frame(width: frameWidth, height: frameHeight)
             .clipped()
     }
 
-    init(url: String, loading: Image = Image(systemName: "photo"), failure: Image = Image(systemName: "multiply.circle")) {
+    var frameWidth: CGFloat
+    var frameHeight: CGFloat
+    
+    init(url: String, width: CGFloat, height: CGFloat, loading: Image = Image(systemName: "photo"), failure: Image = Image(systemName: "multiply.circle")) {
         _loader = StateObject(wrappedValue: Loader(url: url))
         self.loading = loading
         self.failure = failure
+        self.frameHeight = height
+        self.frameWidth = width
     }
 
     private func selectImage() -> Image {

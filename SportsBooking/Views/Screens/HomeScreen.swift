@@ -32,50 +32,151 @@ struct HomeScreen: View {
     @State var isFavorite: Bool = false
 
     init(userSession: UserSession) {
-        UINavigationBar.appearance().backgroundColor = .clear
+        //UINavigationBar.appearance().backgroundColor = .clear
         self.userSession = userSession
+//        UINavigationBar.appearance().backgroundColor = .white
+        
+        
+        //UINavigationBar.appearance().backgroundColor = .white
     }
     
     @State var searchBarText: String = ""
     @State private var showLoadingIndicator: Bool = true
     
+    private var customTitleSize: CGFloat {
+        UIScreen.main.bounds.width / 20
+    }
+    
     var body: some View {
         NavigationView {
             GeometryReader { geometry in
                 ZStack {
-                    Color.init(hex: "#f3f4f6").ignoresSafeArea(.all)
+                    //Color.init(hex: "#f3f4f6").ignoresSafeArea(.all)
+                    Color.white
+                    
                     VStack() {
-                        CustomNavigationBar(searchBarText: $searchBarText)
+                        //CustomNavigationBar(searchBarText: $searchBarText)
                         
-                        Group {
-                            if userSession.footballFacilities.count > 0 {
-                                ScrollView(showsIndicators: false) {
-                                    VStack(alignment: .center) {
-                                        ForEach(0..<userSession.footballFacilities.count, id: \.self) { index in
-                                            NavigationLink(destination: DetailsScreen(userSession: userSession, footballFacility: userSession.footballFacilities[index], for: geometry.size)) {
-                                                FieldsListCell(footballFacility: userSession.footballFacilities[index], size: geometry.size, userSession: userSession)
-                                                    .padding(.horizontal, cellHorizontalPadding)
-                                                    .padding(.top, 10)
+                        
+                        ScrollView(showsIndicators: false) {
+                            
+                            HStack {
+                                Text("АКЦИИ")
+                                    .font(.system(size: customTitleSize, weight: .bold, design: .rounded))
+                                    .foregroundColor(Color.black)
+                                    .multilineTextAlignment(.trailing)
+                                    .padding(.leading, cellHorizontalPadding)
+
+                                Spacer()
+                                HStack {
+                                    Text("Все")
+                                        .font(.system(size: customTitleSize - 6, weight: .bold, design: .default))
+                                        .foregroundColor(filterOrangeColor)
+                                }
+                                .padding(10)
+                                .fixedSize(horizontal: true, vertical: false)
+                                .background(filterOrangeColor.opacity(0.1))
+                                .cornerRadius(10)
+                                .padding(.trailing, cellHorizontalPadding)
+                            }
+                            .padding(.top)
+                            
+                            Group {
+                                if userSession.footballFacilities.count > 0 {
+                                    ScrollView(.horizontal, showsIndicators: false) {
+                                        HStack(spacing: 0) {
+                                            ForEach(0..<7) { card in
+                                                SpecialOfferCarousel()
+                                                    .background(colorScheme == .dark ? Color.black.opacity(1) : Color.white.opacity(1))
+                                                    .cornerRadius(15)
+                                                    .shadow(color: colorScheme == .dark ? Color.white : Color.black.opacity(0.4), radius: 2)
+                                                    .buttonStyle(PlainButtonStyle())
+                                                    .padding(.leading, card == 0 ? cellHorizontalPadding : 10)
                                             }
+                                            
+
                                         }
+                                        .padding(.top, 10)
                                     }
-                                    
+                                }
+                                else {
+                                    ZStack {
+                                        Rectangle().fill(Color.white)
+                                        ActivityIndicatorView(isVisible: self.$showLoadingIndicator, type: .default)
+                                                                .frame(width: 30, height: 30)
+                                                                .foregroundColor(.red)
+                                    }
                                 }
                             }
-                            else {
-                                ZStack {
-                                    Rectangle().fill(bgHexColor)
-                                    ActivityIndicatorView(isVisible: self.$showLoadingIndicator, type: .default)
-                                                            .frame(width: 30, height: 30)
-                                                            .foregroundColor(.red)
+                            
+                            HStack {
+                                Text("ПОПУЛЯРНЫЕ")
+                                    .font(.system(size: customTitleSize, weight: .bold, design: .rounded))
+                                    .foregroundColor(Color.black)
+                                    .multilineTextAlignment(.trailing)
+                                    .padding(.leading, cellHorizontalPadding)
+
+                                Spacer()
+                                HStack {
+                                    Text("Все")
+                                        .font(.system(size: customTitleSize - 6, weight: .bold, design: .default))
+                                        .foregroundColor(filterOrangeColor)
+                                }
+                                .padding(10)
+                                .fixedSize(horizontal: true, vertical: false)
+                                .background(filterOrangeColor.opacity(0.1))
+                                .cornerRadius(10)
+                                .padding(.trailing, cellHorizontalPadding)
+                            }
+                            .padding(.top)
+
+                            Group {
+                                if userSession.footballFacilities.count > 0 {
+                                    VStack(alignment: .center) {
+                                        ForEach(0..<userSession.footballFacilities.count + 1, id: \.self) { index in
+                                            NavigationLink(destination: DetailsScreen(userSession: userSession, footballFacility: userSession.footballFacilities[index / 2], for: geometry.size)) {
+                                                FieldsListCell(footballFacility: userSession.footballFacilities[index / 2], size: geometry.size, userSession: userSession)
+                                                    .padding(.horizontal, cellHorizontalPadding)
+                                                    .padding(.top, 10)
+                                                    .padding(.bottom, 10)
+                                            }
+                                            
+                                        }
+                                    }
+                                }
+                                else {
+                                    ZStack {
+                                        Rectangle().fill(Color.white)
+                                        ActivityIndicatorView(isVisible: self.$showLoadingIndicator, type: .default)
+                                                                .frame(width: 30, height: 30)
+                                                                .foregroundColor(.red)
+                                    }
                                 }
                             }
                         }
                         
-                        
                     }
                 }
-                .navigationBarHidden(true)
+                //.navigationBarTitleDisplayMode(.inline)
+                .navigationTitle(Text("Главная"))
+                .navigationBarItems(leading: HStack {
+                    Image("placeholder")
+                        .resizable()
+                        .renderingMode(.template)
+                        .scaledToFill()
+                        .frame(width: 20, height: 20)
+                        .foregroundColor(filterOrangeColor)
+                    Text("Нур-Султан ")
+                        .font(.system(size: 14, weight: .semibold, design: .default))
+                        .foregroundColor(filterOrangeColor)
+                    Image(systemName: "chevron.down")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 6, height: 6)
+                        .foregroundColor(filterOrangeColor)
+                    
+                })
+                //.navigationBarHidden(true)
             }
         }
     }
@@ -95,9 +196,10 @@ struct CustomNavigationBar: View {
     }
     
     var body: some View {
-        RoundedImage()
+        //RoundedImage()
         
-        SearchBar(text: $searchBarText).padding(.horizontal, cellHorizontalPadding).padding(.top, -20)
+//        SearchBar(text: $searchBarText).padding(.horizontal, cellHorizontalPadding).padding(.top, -20)
+//            .padding(.top, 25)
         
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 5) {
@@ -154,144 +256,6 @@ struct CustomNavigationBar: View {
     
 }
 
-//var body: some View {
-//    NavigationView {
-//        GeometryReader { geometry in
-//            ScrollView(showsIndicators: false) {
-//                VStack{
-//                    SearchBar().padding(.top, -computedTopPadding(for: geometry.size) * 0.5)
-//                    VStack {
-//                        HStack {
-//                            Text("Горячие предложения")
-//                                .bold()
-//                                .multilineTextAlignment(.trailing)
-//                                .padding(.leading, 20)
-//
-//                            Spacer()
-//                            Text("Посмотреть все >")
-//                                .multilineTextAlignment(.leading)
-//                                .foregroundColor(Color(#colorLiteral(red: 0.9580881, green: 0.10593573, blue: 0.3403331637, alpha: 1)))
-//                                .font(.subheadline)
-//                                .padding(.trailing, 20)
-//                        }
-//
-//                        ScrollView(.horizontal, showsIndicators: false) {
-//                            HStack {
-//                                ForEach(0..<7) { card in
-//                                    NavigationLink(
-//                                        destination: DetailsScreen(for: geometry.size),
-//                                        label: {
-//                                            SpecialOfferCarousel()
-//                                                .background(colorScheme == .dark ? Color.black.opacity(1) : Color.white.opacity(1))
-//                                                .cornerRadius(15)
-//                                                .shadow(color: colorScheme == .dark ? Color.white : Color.black.opacity(0.4), radius: 2)
-//                                        })
-//                                        .buttonStyle(PlainButtonStyle())
-//                                }
-//                                .padding(.bottom, 10)
-//                                .padding(.leading, 30)
-//
-//                            }
-//                            .padding(.top, 10)
-//                        }
-//                    }
-//                    .padding(.top, -computedTopPadding(for: geometry.size))
-//                    .opacity(1)
-//
-//                    ZStack {
-//                        Rectangle()
-//                            .foregroundColor(Color.gray.opacity(0.1))
-//                        VStack {
-//                            FieldsList(for: geometry.size)
-//                        }
-//                        .padding(.top, -20)
-//                    }
-//                    .cornerRadius(25, corners: [.topLeft, .topRight])
-//                }
-//            }
-//            .edgesIgnoringSafeArea(.top)
-//
-//        }
-//        .navigationBarTitle("")
-//                .navigationBarHidden(true)
-//    }
-//}
-
-//HStack {
-//    HStack {
-//        Image(systemName: "magnifyingglass").imageScale(.large)
-//
-//        TextField("Название Поля", text: $searchText, onEditingChanged: { isEditing in
-//            self.showCancelButton = true
-//        }, onCommit: {
-//            print("onCommit")
-//        }).foregroundColor(.primary)
-//
-//        Button(action: {
-//            self.searchText = ""
-//        }) {
-//            Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
-//        }
-//    }
-//        .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-//        .foregroundColor(.secondary)
-//        .background(Color(.secondarySystemBackground))
-//        .cornerRadius(10.0)
-//
-//    if showCancelButton  {
-//        Button("Cancel") {
-//            UIApplication.shared.endEditing(true) // this must be placed before the other commands here
-//                self.searchText = ""
-//                self.showCancelButton = false
-//        }
-//            .foregroundColor(Color(.systemBlue))
-//    }
-//}
-//    .padding()
-//    .navigationBarHidden(showCancelButton)
-
-
-//ScrollView(.horizontal, showsIndicators: false) {
-//    HStack(spacing: 10) {
-//        ForEach(0..<7) { index in
-//            Image("ad")
-//                .resizable()
-//                .aspectRatio(contentMode: .fill)
-//                .frame(width: geometry.size.width / 3, height: 120)
-//                .animation(.easeInOut)
-//                .clipShape(RoundedRectangle(cornerRadius: 15))
-//                .shadow(radius: 4)
-//                .clipped()
-//        }
-//    }
-//    .padding()
-//}
-
-//                                    VStack(spacing: 0) {
-//                                        ForEach(0..<7) { index in
-//                                            NavigationLink(destination: DetailView()) {
-//                                                ZStack(alignment: .bottom) {
-//                                                    Image("arena")
-//                                                        .resizable()
-//                                                        .scaledToFill()
-//                                                    HStack {
-//                                                        Text("СТО футбольное поле")
-//                                                            .font(.system(.headline))
-//                                                        Spacer()
-//                                                        Text("10000 тг./час")
-//                                                            .font(.system(.caption))
-//                                                            .foregroundColor(.secondary)
-//                                                    }
-//                                                    .padding()
-//                                                    .background(Color.white)
-//
-//                                                }
-//                                                .frame(width: geometry.size.width * 0.9, height: 200)
-//                                                .cornerRadius(10)
-//                                                .padding(.top)
-//                                            }
-//                                        }
-//                                    }
 
 func hexStringToUIColor (hex:String) -> UIColor {
     var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()

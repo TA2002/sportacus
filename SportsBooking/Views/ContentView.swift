@@ -13,13 +13,20 @@ struct ContentView: View {
     @ObservedObject var userSession = UserSession()
     //@Environment(\.colorScheme) var colorScheme
     init() {
-        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        UINavigationBar.appearance().shadowImage = UIImage()
-        UINavigationBar.appearance().isTranslucent = true
-        UINavigationBar.appearance().tintColor = .clear
-        UINavigationBar.appearance().backgroundColor = .clear
+//        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+//        UINavigationBar.appearance().shadowImage = UIImage()
+//        UINavigationBar.appearance().isTranslucent = true
+        //
+        //UINavigationBar.appearance().barTintColor = .white//UIColor(filterOrangeColor)  -- bg color
         
-        UITabBar.appearance().backgroundColor = .white
+        
+        
+//        UINavigationBar.appearance().backgroundColor = .white
+//        UINavigationBar.appearance().tintColor = .clear//UIColor.white
+        //UINavigationBar.appearance().barTintColor = .clear
+//        UINavigationBar.appearance().backgroundColor = .clear//UIColor(filterOrangeColor)
+//        
+//        UITabBar.appearance().backgroundColor = .white
         
     }
     var body: some View {
@@ -32,13 +39,18 @@ struct ContentView: View {
                             Label("Главная", systemImage: "house.fill")
                         }
                         .tag(0)
-                    ProfileScreen(currentUserSession: userSession)
+                    FieldSearchScreen()
+                        .tabItem {
+                            Label("Поиск", systemImage: "magnifyingglass")
+                        }
+                        .tag(1)
+                    ProfileScreen(userSession: userSession)
                         .tabItem {
                             Label("Профиль", systemImage: "person.circle.fill")
                         }
-                        .tag(1)
+                        .tag(2)
                 }
-                .accentColor(.red)
+                .accentColor(filterOrangeColor)
             }
             else {
                 LoginView(currentUserSession: userSession)
@@ -49,19 +61,7 @@ struct ContentView: View {
     }
 }
 
-struct ProfileScreen: View {
-    
-    @ObservedObject var currentUserSession: UserSession
-    
-    var body: some View {
-        Button("Log out", action: {
-            currentUserSession.userDidLogOut()
-        })
-    }
-    
-    
-    
-}
+
 
 
 

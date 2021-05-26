@@ -69,9 +69,12 @@ class UserSession: ObservableObject {
         
     }
     
-    func bookSession(footballFacilityId: Int, footballPitchId: Int, date: DateInRegion, sessionsForBooking: [TimeSession]) {
+    func bookSession(footballPitchPricePerHour: Int, footballFacilityId: Int, footballPitchId: Int, date: DateInRegion, sessionsForBooking: [TimeSession]) {
         let dateString = "\(date.day)-\(date.month)-\(date.year)"
         let bookingsRef = Database.database(url: "https://sportacus-dd671-default-rtdb.asia-southeast1.firebasedatabase.app").reference().child(dateString).child("\(footballFacilityId)").child("\(footballPitchId)")
+        let profileRef = Database.database(url: "https://sportacus-dd671-default-rtdb.asia-southeast1.firebasedatabase.app").reference().ref.child("users").child("\(String(describing: Auth.auth().currentUser!.uid))").child("transactions")
+        
+        //let timeRef = Database.database(url: "https://sportacus-dd671-default-rtdb.asia-southeast1.firebasedatabase.app").reference().child("serverTimestamp")
         
         var propertyLists: [[String: Any]] = [[String: Any]]()
         
@@ -86,16 +89,39 @@ class UserSession: ObservableObject {
         }) { (error) in
             print(error.localizedDescription)
         }
+        
+        profileRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            var value = snapshot.value as? [[String: Any]] ?? [[String: Any]]()
+            value.append(Transaction(amount: footballPitchPricePerHour / 2 * sessionsForBooking.count, date: dateString, sessions: sessionsForBooking, footballFacilityId: footballFacilityId).asPropertyList())
+            profileRef.setValue(value)
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+        
+//        profileRef.setValue(Transaction(amount: footballPitchPricePerHour / 2 * sessionsForBooking.count, date: dateString, sessions: sessionsForBooking).asPropertyList())
+    }
+    
+    func toggleFavoriteId(footballFacilityId: Int) {
+        let profileRef = Database.database(url: "https://sportacus-dd671-default-rtdb.asia-southeast1.firebasedatabase.app").reference().ref.child("users").child("\(String(describing: Auth.auth().currentUser!.uid))").child("favoriteIds")
+        profileRef.observeSingleEvent(of: .value) { snapshot in
+            var favoriteIds = snapshot.value as? [Int] ?? []
+            if favoriteIds.contains(footballFacilityId) {
+                favoriteIds.remove(at: favoriteIds.firstIndex(of: footballFacilityId)!)
+            }
+            else {
+                favoriteIds.append(footballFacilityId)
+            }
+            profileRef.setValue(favoriteIds)
+        }
+        
     }
     
     init() {
         let facilities = [FootballFacility]()
-        let profile = Profile(email: "", firstName: "", lastName: "", phoneNumber: "", favoriteIds: [])
+        let profile = Profile(email: "", firstName: "", lastName: "", phoneNumber: "", favoriteIds: [], transactions: [])
         
         self.model = SportsBooking(footballFacilities: facilities, profile: profile)
         userLogedIn = isUserLoggedIn()
-        
-        print("isLogedIn: \(userLogedIn)")
         
         let profileRef = Database.database(url: "https://sportacus-dd671-default-rtdb.asia-southeast1.firebasedatabase.app").reference().ref.child("users")
         
@@ -103,9 +129,7 @@ class UserSession: ObservableObject {
         
         cancellable = $userLogedIn.sink { isLogedIn in
             if isLogedIn {
-                print("jhey")
                 
-
                 var currentTimeStamp: TimeInterval?
 
                 let ref = Database.database(url: "https://sportacus-dd671-default-rtdb.asia-southeast1.firebasedatabase.app").reference().child("serverTimestamp")
@@ -114,7 +138,7 @@ class UserSession: ObservableObject {
 
                 ref.observeSingleEvent(of: .value, with: { snap in
                     if let t = snap.value as? TimeInterval {
-                        
+
                         currentTimeStamp = t/1000
                         let timeString = "\(Date(timeIntervalSince1970: currentTimeStamp ?? TimeInterval(0)))"
                         var date = ""
@@ -137,6 +161,8 @@ class UserSession: ObservableObject {
                     }
                 })
                 
+                print("uuid \(Auth.auth().currentUser!.uid)")
+                
                 profileRef.child("\(String(describing: Auth.auth().currentUser!.uid))").observeSingleEvent(of: .value) { snapshot in
                     if let userDict = snapshot.value as? [String:Any] {
                         let firstName = userDict["firstName"] as? String ?? ""
@@ -144,10 +170,19 @@ class UserSession: ObservableObject {
                         let email = userDict["email"] as? String ?? ""
                         let phoneNumber = userDict["phoneNumber"] as? String ?? ""
                         let favoriteIds = userDict["favoriteIds"] as? [Int] ?? []
-                        self.model.createProfile(profile: Profile(email: email, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, favoriteIds: favoriteIds))
+                        //var value = snapshot.value as? [[String: Any]] ?? [[String: Any]]()
+                        let transactions = snapshot.childSnapshot(forPath: "transactions").value as? [[String: Any]] ?? nil
+                        var final_transactions: [Transaction] = []
+                        if transactions != nil {
+                            for transaction in transactions! {
+                                final_transactions.append(Transaction(from: transaction))
+                            }
+                        }
+
+                        
+                        self.model.createProfile(profile: Profile(email: email, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, favoriteIds: favoriteIds, transactions: final_transactions))
+                        print(self.model.profile)
                     }
-                    profileRef.removeAllObservers()
-                    //print(self.model.profile)
                 }
 
                 sportsFacilitiesRef.observeSingleEvent(of: .value) { snapshot in
@@ -216,7 +251,7 @@ class UserSession: ObservableObject {
                 profileRef.removeAllObservers()
                 sportsFacilitiesRef.removeAllObservers()
                 let facilities = [FootballFacility]()
-                let profile = Profile(email: "", firstName: "", lastName: "", phoneNumber: "", favoriteIds: [])
+                let profile = Profile(email: "", firstName: "", lastName: "", phoneNumber: "", favoriteIds: [], transactions: [])
                 
                 self.model = SportsBooking(footballFacilities: facilities, profile: profile)
             }

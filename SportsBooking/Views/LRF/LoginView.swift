@@ -195,13 +195,13 @@ struct RoundedImage: View {
 
     var body: some View {
         
-        Image("logo")
+        Image("sportacus")
            .resizable()
            .aspectRatio(contentMode: .fill)
-           .frame(width: 150, height: 150)
+            .frame(width: UIScreen.main.bounds.width * 0.6, height: UIScreen.main.bounds.height / 9)
            .clipped()
-           .cornerRadius(150)
-           .padding(.bottom, 40)
+           //.cornerRadius(150)
+           .padding(.bottom, 25)
         
     }
 

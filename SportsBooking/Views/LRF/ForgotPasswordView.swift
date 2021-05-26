@@ -216,7 +216,7 @@ let lightblueColor = Color(#colorLiteral(red: 0.9580881, green: 0.10593573, blue
 
 
 let bgHexColor = Color(hex: "#f3f4f6")
-let filterOrangeColor = Color(hex: "#ed702d")
+let filterOrangeColor = Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1))  //Color(hex: "#ed702d")
 let blackColor = Color(hex: "#3f3d43")
 let grayColor = Color(hex: "#8d8d8f")
 let hourGrayColor = Color(hex: "#8c8b8e")

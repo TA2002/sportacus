@@ -10,45 +10,31 @@ import SwiftUI
 struct SpecialOfferCarousel: View {
     @Environment(\.colorScheme) var colorScheme
     
+    var imageWidth: CGFloat {
+        UIScreen.main.bounds.width*0.8
+    }
+    
     var body: some View {
-        VStack {
+        ZStack(alignment: .center) {
             Image("court")
                 .resizable()
-                .frame(width: 270, height: 150)
-            
-            HStack {
-                Text("Astana Arena")
-                    .bold()
-                    .padding(.all, 10)
-                Spacer()
+                .scaledToFill()
+                .frame(width: imageWidth, height: imageWidth * 0.6)
+                .clipped()
+                .opacity(0.9)
+            VStack {
+                Text("Football Life")
+                    .font(.system(size:  28, weight: .bold, design: .rounded))
+                    .foregroundColor(Color.white)
+                    .shadow(color: Color.black, radius: 5, x: 1, y: 2)
+                Text("-50%")
+                    .font(.system(size:  20, weight: .bold, design: .rounded))
+                    .foregroundColor(Color.white)
+                    .shadow(color: Color.black, radius: 5, x: 1, y: 2)
             }
-            
-            HStack {
-                Text("Alikhan Bokeikhan 2")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                    .padding(.leading, 10)
-                Spacer()
-            }
-            
-            HStack {
-                ForEach(0 ..< 5) { item in
-                    Image(systemName: "star.fill")
-                        .foregroundColor(.yellow)
-                        .font(.subheadline)
-                }
-                Spacer()
-                
-                Text("10000 KZT")
-                    .font(.subheadline)
-                    .bold()
-            }
-            .padding(.bottom, 30)
-            .padding(.leading, 10)
-            .padding(.trailing, 10)
             
         }
-        .frame(width: 250, height: 250)
+        
         .cornerRadius(10)
         
     }

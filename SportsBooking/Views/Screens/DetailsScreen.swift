@@ -25,9 +25,15 @@ struct DetailsScreen: View {
     
     init(userSession: UserSession, footballFacility: FootballFacility, for size: CGSize) {
         self.userSession = userSession
-        UINavigationBar.appearance().tintColor = UIColor.white
+        //UINavigationBar.appearance().tintColor = UIColor.white
         self.size = size
         self.footballFacility = footballFacility
+        
+                
+//        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+//        UINavigationBar.appearance().shadowImage = UIImage()
+//        UINavigationBar.appearance().isTranslucent = true
+//        UINavigationBar.appearance().barTintColor = .clear
         //print(300 / size.width)
         //UINavigationBar.appearance().color
     }
@@ -41,17 +47,37 @@ struct DetailsScreen: View {
                 VStack {
                     ScrollView(.vertical) {
                         VStack {
-                            LunBo(images: footballFacility.photoUrls, height: computedImageHeight(for: size), index: $lunbo_img_index)
+                            ZStack(alignment: .top){
+                                LunBo(images: footballFacility.photoUrls, height: computedImageHeight(for: size), index: $lunbo_img_index)
+                                HStack {
+                                    ZStack(alignment: .center) {
+                                        Circle()
+                                            .fill(Color.black.opacity(0.2))
+                                            .frame(width: 40, height: 40)
+                                            .shadow(color: Color.gray, radius: 5)
+                                        Image(systemName: "chevron.left")
+                                            .imageScale(.large)
+                                            .foregroundColor(Color.white)
+                                    }.onTapGesture {
+                                        presentationMode.wrappedValue.dismiss()
+                                    }
+                                    Spacer()
+                                    ZStack(alignment: .center) {
+                                        Circle()
+                                            .fill(Color.black.opacity(0.2))
+                                            .frame(width: 40, height: 40)
+                                            .shadow(color: Color.gray, radius: 5)
+                                        Image(systemName: userSession.profile.favoriteIds.contains(footballFacility.id) ? "heart.fill" : "heart")
+                                            .imageScale(.large)
+                                            .foregroundColor(.white)
+                                        //Color(#colorLiteral(red: 0.9580881, green: 0.10593573, blue: 0.3403331637, alpha: 1)
+                                        }.onTapGesture {
+                                            userSession.toggleFavoriteId(footballFacilityId: footballFacility.id)
+                                        }
+                                }
+                                .padding()
+                            }
                             .edgesIgnoringSafeArea(.all)
-//                            ImageCarouselView(numberOfImages: footballFacility.photoUrls.count) {
-//                                ForEach(0..<footballFacility.photoUrls.count) { photoIndex in
-//                                    RemoteImage(url: footballFacility.photoUrls[photoIndex])
-//                                        .aspectRatio(contentMode: .fill)
-//                                        .frame(width: size.width, height: computedImageHeight(for: size))
-//                                }
-//                            }
-//                            .edgesIgnoringSafeArea(.all)
-                            
                             HStack {
                                 Text(footballFacility.name)
                                     .font(.system(size: nameFontSize, weight: .heavy, design: .default))
@@ -167,66 +193,39 @@ struct DetailsScreen: View {
                             }
                             .padding()
                             Spacer()
-                            Text("Забронировать")
-                                .bold()
-                                .foregroundColor(.white)
-                                .padding()
-                                .frame(width: geometry.size.width * 0.5)
-                                .background(filterOrangeColor)
-                                .cornerRadius(8)
-                                .padding(.vertical)
-                                .onTapGesture {
-                                    userSession.createNewBookingSession(footballFacility: footballFacility, footballPitch: footballFacility.footballPitches[buttonIndex])
-                                    if userSession.datesForBooking != nil {
-                                        userSession.downloadClosedSessions(footballFacilityId: footballFacility.id, footballPitchId: footballFacility.footballPitches[buttonIndex].id, date: userSession.datesForBooking![0])
-                                    }
-                                    sheetIsPresented = true
-                                }
-//                                NavigationLink(
-//                                    destination: BookingScreen(userSession: userSession, footballFacility: footballFacility, footballPitch: footballFacility.footballPitches[buttonIndex]),
-//                                    label: {
-//
-//                                })
+                            NavigationLink(destination: BookingScreen(userSession: userSession, footballFacility: footballFacility, footballPitch: footballFacility.footballPitches[buttonIndex])
+                                            .navigationBarBackButtonHidden(true)
+                                            .environment(\.showingSheet, self.$sheetIsPresented).onAppear{
+                                                userSession.createNewBookingSession(footballFacility: footballFacility, footballPitch: footballFacility.footballPitches[buttonIndex])
+                                                if userSession.datesForBooking != nil {
+                                                    userSession.downloadClosedSessions(footballFacilityId: footballFacility.id, footballPitchId: footballFacility.footballPitches[buttonIndex].id, date: userSession.datesForBooking![0])
+                                                }
+                                            }) {
+                                Text("Забронировать")
+                                    .bold()
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .frame(width: geometry.size.width * 0.5)
+                                    .background(filterOrangeColor)
+                                    .cornerRadius(8)
+                                    .padding(.vertical)
+                                    
+                            }
                             Spacer()
                         }
                         
                     }
-                    .sheet(isPresented: $sheetIsPresented, content: {
-                        BookingScreen(userSession: userSession, footballFacility: footballFacility, footballPitch: footballFacility.footballPitches[buttonIndex])
-                            .environment(\.showingSheet, self.$sheetIsPresented)
-                    })
                 }
             }
         }
         
         .edgesIgnoringSafeArea([.top, .horizontal])
-        //.navigationBarHidden(true)
+        .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(
-            leading: ZStack(alignment: .center) {
-                Circle()
-                    .fill(Color.black.opacity(0.2))
-                    .frame(width: 40, height: 40)
-                    .shadow(color: Color.gray, radius: 5)
-                Image(systemName: "arrow.left")
-                    .imageScale(.large)
-                    .foregroundColor(Color.white)
-            }.onTapGesture {
-                presentationMode.wrappedValue.dismiss()
-            },
-            trailing: ZStack(alignment: .center) {
-                Circle()
-                    .fill(Color.black.opacity(0.2))
-                    .frame(width: 40, height: 40)
-                    .shadow(color: Color.gray, radius: 5)
-                Image(systemName: isFavorite ? "heart.fill" : "heart")
-                    .imageScale(.large)
-                    .foregroundColor(.white)
-                //Color(#colorLiteral(red: 0.9580881, green: 0.10593573, blue: 0.3403331637, alpha: 1)
-                }.onTapGesture {
-                    isFavorite = !isFavorite
-                }
-            )
+//        .navigationBarItems(
+//            leading: ,
+//            trailing:
+//            )
     }
     
     // MARK: -Drawing Constants

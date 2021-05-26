@@ -8,6 +8,46 @@
 import Foundation
 import SwiftUI
 
+struct Transaction: Identifiable {
+    var id: UUID = UUID()
+    
+    var amount: Int
+    var date: String
+    var sessions: [TimeSession]
+    var footballFacilityId: Int
+    
+    init(amount: Int, date: String, sessions: [TimeSession], footballFacilityId: Int) {
+        self.amount = amount
+        self.date = date
+        self.sessions = sessions
+        self.footballFacilityId = footballFacilityId
+    }
+    
+    func asPropertyList() -> [String: Any] {
+        var propertyLists: [[String: Any]] = [[String: Any]]()
+        
+        for index in (0..<sessions.count) {
+            propertyLists.append(sessions[index].asPropertyList())
+        }
+        
+        return ["amount": amount, "date": date, "sessions": propertyLists, "footballFacilityId": footballFacilityId]
+    }
+    
+    init(from dictionary: [String: Any]) {
+        print("dictionary \(dictionary)")
+        amount = dictionary["amount"] as! Int
+        date = dictionary["date"] as! String
+        self.sessions = []
+        if let transactionSessions = dictionary["sessions"] as? [[String: Int]] {
+            for transactionSession in transactionSessions {
+                sessions.append(TimeSession(from: transactionSession))
+            }
+        }
+        footballFacilityId = dictionary["footballFacilityId"] as? Int ?? 0
+    }
+    
+}
+
 struct TimeSession: Equatable {
     var startHours: Int
     var startMinutes: Int

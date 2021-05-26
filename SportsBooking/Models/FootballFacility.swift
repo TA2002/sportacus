@@ -41,6 +41,14 @@ struct FootballFacility: Identifiable {
         averageRating = averageRating / Double(reviews.count)
     }
     
+    func getMinimumPrice() -> Int {
+        var minimumPrice = footballPitches[0].pricePerHour
+        for index in 1..<footballPitches.count {
+            minimumPrice = min(minimumPrice, footballPitches[index].pricePerHour)
+        }
+        return minimumPrice
+    }
+    
 }
 
 

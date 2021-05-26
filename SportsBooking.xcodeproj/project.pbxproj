@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -28,6 +28,11 @@
 		6974A0F826503869002BB5FC /* Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6974A0F726503869002BB5FC /* Schedule.swift */; };
 		6974A0FC26518F21002BB5FC /* RemoteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6974A0FB26518F21002BB5FC /* RemoteImage.swift */; };
 		6974A14E2655371B002BB5FC /* HorizontalDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6974A14D2655371B002BB5FC /* HorizontalDatePicker.swift */; };
+		6974A15226569968002BB5FC /* BottomCheckOutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6974A15126569968002BB5FC /* BottomCheckOutView.swift */; };
+		6974A15726569E99002BB5FC /* SessionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6974A15626569E99002BB5FC /* SessionsList.swift */; };
+		6974A15D265CFBD3002BB5FC /* SwiftlySearch in Frameworks */ = {isa = PBXBuildFile; productRef = 6974A15C265CFBD3002BB5FC /* SwiftlySearch */; };
+		6974A163265E743C002BB5FC /* FieldSearchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6974A162265E743C002BB5FC /* FieldSearchScreen.swift */; };
+		6974A166265E94FB002BB5FC /* ProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6974A165265E94FB002BB5FC /* ProfileScreen.swift */; };
 		69F630CA264991B000B4F337 /* SportsBookingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F630C9264991B000B4F337 /* SportsBookingApp.swift */; };
 		69F630CC264991B000B4F337 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F630CB264991B000B4F337 /* ContentView.swift */; };
 		69F630CE264991B200B4F337 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69F630CD264991B200B4F337 /* Assets.xcassets */; };
@@ -35,7 +40,6 @@
 		69F630DB264A998900B4F337 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F630DA264A998900B4F337 /* HomeScreen.swift */; };
 		69F630DE264A99B200B4F337 /* DetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F630DD264A99B200B4F337 /* DetailsScreen.swift */; };
 		69F630E2264A9D1E00B4F337 /* SpecialOfferCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F630E1264A9D1E00B4F337 /* SpecialOfferCarousel.swift */; };
-		69F630E5264A9EFB00B4F337 /* FieldsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F630E4264A9EFB00B4F337 /* FieldsList.swift */; };
 		69F630E8264A9FA500B4F337 /* FieldsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F630E7264A9FA500B4F337 /* FieldsListCell.swift */; };
 		69F630EB264AA21400B4F337 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F630EA264AA21400B4F337 /* SearchBar.swift */; };
 		69F630F3264AD04700B4F337 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F630F2264AD04700B4F337 /* SignUpView.swift */; };
@@ -67,6 +71,10 @@
 		6974A0F726503869002BB5FC /* Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schedule.swift; sourceTree = "<group>"; };
 		6974A0FB26518F21002BB5FC /* RemoteImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImage.swift; sourceTree = "<group>"; };
 		6974A14D2655371B002BB5FC /* HorizontalDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalDatePicker.swift; sourceTree = "<group>"; };
+		6974A15126569968002BB5FC /* BottomCheckOutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomCheckOutView.swift; sourceTree = "<group>"; };
+		6974A15626569E99002BB5FC /* SessionsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionsList.swift; sourceTree = "<group>"; };
+		6974A162265E743C002BB5FC /* FieldSearchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldSearchScreen.swift; sourceTree = "<group>"; };
+		6974A165265E94FB002BB5FC /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
 		69F630C6264991B000B4F337 /* SportsBooking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SportsBooking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69F630C9264991B000B4F337 /* SportsBookingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsBookingApp.swift; sourceTree = "<group>"; };
 		69F630CB264991B000B4F337 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -76,7 +84,6 @@
 		69F630DA264A998900B4F337 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		69F630DD264A99B200B4F337 /* DetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsScreen.swift; sourceTree = "<group>"; };
 		69F630E1264A9D1E00B4F337 /* SpecialOfferCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialOfferCarousel.swift; sourceTree = "<group>"; };
-		69F630E4264A9EFB00B4F337 /* FieldsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldsList.swift; sourceTree = "<group>"; };
 		69F630E7264A9FA500B4F337 /* FieldsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldsListCell.swift; sourceTree = "<group>"; };
 		69F630EA264AA21400B4F337 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		69F630F2264AD04700B4F337 /* SignUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
@@ -94,6 +101,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CABADC34310A4BB3178EA781 /* Pods_SportsBooking.framework in Frameworks */,
+				6974A15D265CFBD3002BB5FC /* SwiftlySearch in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,8 +129,10 @@
 		69469979264AFBEB00D00BB3 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				694699A9264BEC3300D00BB3 /* Screens */,
 				69F630F1264AD03500B4F337 /* LRF */,
+				694699A9264BEC3300D00BB3 /* Screens */,
+				6974A15126569968002BB5FC /* BottomCheckOutView.swift */,
+				6974A15626569E99002BB5FC /* SessionsList.swift */,
 				692867FB264CA2D80084E1C9 /* ImageDetail.swift */,
 				6974A14D2655371B002BB5FC /* HorizontalDatePicker.swift */,
 				692867FC264CA2D80084E1C9 /* LunBo.swift */,
@@ -131,7 +141,6 @@
 				6974A0DB264EB629002BB5FC /* WorkTimeView.swift */,
 				69F630E7264A9FA500B4F337 /* FieldsListCell.swift */,
 				69F630EA264AA21400B4F337 /* SearchBar.swift */,
-				69F630E4264A9EFB00B4F337 /* FieldsList.swift */,
 				69F630E1264A9D1E00B4F337 /* SpecialOfferCarousel.swift */,
 			);
 			path = Views;
@@ -153,6 +162,8 @@
 				69286800264CABBB0084E1C9 /* Font.swift */,
 				692867F8264CA0BA0084E1C9 /* ImageCarouselView.swift */,
 				692867F2264C65330084E1C9 /* BookingScreen.swift */,
+				6974A162265E743C002BB5FC /* FieldSearchScreen.swift */,
+				6974A165265E94FB002BB5FC /* ProfileScreen.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -260,6 +271,9 @@
 			dependencies = (
 			);
 			name = SportsBooking;
+			packageProductDependencies = (
+				6974A15C265CFBD3002BB5FC /* SwiftlySearch */,
+			);
 			productName = SportsBooking;
 			productReference = 69F630C6264991B000B4F337 /* SportsBooking.app */;
 			productType = "com.apple.product-type.application";
@@ -287,6 +301,9 @@
 				Base,
 			);
 			mainGroup = 69F630BD264991B000B4F337;
+			packageReferences = (
+				6974A15B265CFBD3002BB5FC /* XCRemoteSwiftPackageReference "SwiftlySearch" */,
+			);
 			productRefGroup = 69F630C7264991B000B4F337 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -356,6 +373,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6974A15726569E99002BB5FC /* SessionsList.swift in Sources */,
 				69F630CC264991B000B4F337 /* ContentView.swift in Sources */,
 				6974A0E4264EFACB002BB5FC /* Profile.swift in Sources */,
 				69469972264AE39400D00BB3 /* Service.swift in Sources */,
@@ -367,6 +385,7 @@
 				69469984264B088E00D00BB3 /* ResetMessage.swift in Sources */,
 				692867F9264CA0BA0084E1C9 /* ImageCarouselView.swift in Sources */,
 				69F630DE264A99B200B4F337 /* DetailsScreen.swift in Sources */,
+				6974A15226569968002BB5FC /* BottomCheckOutView.swift in Sources */,
 				692867FD264CA2D80084E1C9 /* ImageDetail.swift in Sources */,
 				6974A0DF264EDC86002BB5FC /* FootballFacility.swift in Sources */,
 				6974A0E7264EFAEA002BB5FC /* FootballPitch.swift in Sources */,
@@ -376,13 +395,14 @@
 				6946996E264AE34500D00BB3 /* RegistrationMessage.swift in Sources */,
 				69F630E2264A9D1E00B4F337 /* SpecialOfferCarousel.swift in Sources */,
 				6974A0F826503869002BB5FC /* Schedule.swift in Sources */,
+				6974A163265E743C002BB5FC /* FieldSearchScreen.swift in Sources */,
 				6974A0FC26518F21002BB5FC /* RemoteImage.swift in Sources */,
 				69F630DB264A998900B4F337 /* HomeScreen.swift in Sources */,
 				69F630EB264AA21400B4F337 /* SearchBar.swift in Sources */,
 				6974A0ED264EFB1D002BB5FC /* Review.swift in Sources */,
 				6974A0DC264EB629002BB5FC /* WorkTimeView.swift in Sources */,
 				6974A0F0264EFCAC002BB5FC /* SportsBooking.swift in Sources */,
-				69F630E5264A9EFB00B4F337 /* FieldsList.swift in Sources */,
+				6974A166265E94FB002BB5FC /* ProfileScreen.swift in Sources */,
 				69F630F3264AD04700B4F337 /* SignUpView.swift in Sources */,
 				69F630F7264AD05100B4F337 /* LoginView.swift in Sources */,
 				69F630CA264991B000B4F337 /* SportsBookingApp.swift in Sources */,
@@ -578,6 +598,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6974A15B265CFBD3002BB5FC /* XCRemoteSwiftPackageReference "SwiftlySearch" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/thislooksfun/SwiftlySearch";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6974A15C265CFBD3002BB5FC /* SwiftlySearch */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6974A15B265CFBD3002BB5FC /* XCRemoteSwiftPackageReference "SwiftlySearch" */;
+			productName = SwiftlySearch;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 69F630BE264991B000B4F337 /* Project object */;
 }

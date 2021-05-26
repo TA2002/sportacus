@@ -67,7 +67,7 @@ struct LunBo: View {
             
             HStack(spacing: 0) {
                 ForEach(images.indices, id: \.self) { index in
-                    RemoteImage(url: images[index])
+                    RemoteImage(url: images[index], width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width * 0.6)
                         //.scaledToFill()
                 }
             }

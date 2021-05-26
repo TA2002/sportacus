@@ -119,6 +119,7 @@ struct SportsBooking {
     
     mutating func createProfile(profile: Profile) {
         self.profile = profile
+        print(profile)
     }
     
 }
